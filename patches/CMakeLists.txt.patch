@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index e2a1c5c..e56e1da 100644
+index e2a1c5c..7fd1b12 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -1,5 +1,9 @@
@@ -120,7 +120,7 @@ index e2a1c5c..e56e1da 100644
  	findutil(__7ZIP "7za;7z")
  	findutil(__BZIP2 bzip2)
  	findutil(__CAT cat)
-@@ -157,24 +117,27 @@ function(makemacros)
+@@ -157,24 +117,28 @@ function(makemacros)
  	findutil(__CPP cpp)
  	findutil(__CXX c++)
  	findutil(__SQ sq)
@@ -145,14 +145,14 @@ index e2a1c5c..e56e1da 100644
  	configure_file(platform.in platform @ONLY)
  	configure_file(rpmrc.in rpmrc @ONLY)
  	configure_file(macros.in macros @ONLY)
--	configure_file(rpmpopt.in rpmpopt-${PROJECT_VERSION} @ONLY)
+ 	configure_file(rpmpopt.in rpmpopt-${PROJECT_VERSION} @ONLY)
 -	configure_file(rpm.pc.in rpm.pc @ONLY)
  
 +	# Run installplatform script to process platform-specific files
  	install(CODE "execute_process(COMMAND
  		${CMAKE_COMMAND} -E env pkglibdir=${RPM_CONFIGDIR}
  			${CMAKE_SOURCE_DIR}/installplatform
-@@ -184,390 +147,14 @@ function(makemacros)
+@@ -184,390 +148,17 @@ function(makemacros)
  	)
  endfunction()
  
@@ -452,9 +452,11 @@ index e2a1c5c..e56e1da 100644
 -
 +# Generate configuration files
  makemacros()
--foreach(f macros rpmrc rpmpopt-${PROJECT_VERSION})
--	install(FILES ${CMAKE_BINARY_DIR}/${f} DESTINATION ${RPM_CONFIGDIR})
--endforeach()
++
++# Install core config files (platform is installed by installplatform script)
+ foreach(f macros rpmrc rpmpopt-${PROJECT_VERSION})
+ 	install(FILES ${CMAKE_BINARY_DIR}/${f} DESTINATION ${RPM_CONFIGDIR})
+ endforeach()
  
 -if (ENABLE_TESTSUITE)
 -	add_subdirectory(tests)
@@ -472,10 +474,7 @@ index e2a1c5c..e56e1da 100644
 -		-E create_symlink \
 -			../../${CMAKE_INSTALL_BINDIR}/${cmd} \
 -			\$ENV{DESTDIR}/${RPM_CONFIGDIR}/${cmd})")
-+# Install only macros and rpmrc (platform is installed by installplatform script)
-+foreach(f macros rpmrc)
-+	install(FILES ${CMAKE_BINARY_DIR}/${f} DESTINATION ${RPM_CONFIGDIR})
- endforeach()
+-endforeach()
 -
 -add_custom_target(ChangeLog
 -		   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
@@ -549,3 +548,5 @@ index e2a1c5c..e56e1da 100644
 -	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${CMAKE_PROJECT_NAME}
 -	NAMESPACE rpm::
 -)
++# Install file attributes
++add_subdirectory(fileattrs)
