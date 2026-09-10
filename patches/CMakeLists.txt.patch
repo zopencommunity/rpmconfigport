@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index e2a1c5c..7fd1b12 100644
+index e2a1c5c..49e1d14 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -1,5 +1,9 @@
@@ -152,7 +152,7 @@ index e2a1c5c..7fd1b12 100644
  	install(CODE "execute_process(COMMAND
  		${CMAKE_COMMAND} -E env pkglibdir=${RPM_CONFIGDIR}
  			${CMAKE_SOURCE_DIR}/installplatform
-@@ -184,390 +148,17 @@ function(makemacros)
+@@ -184,390 +148,18 @@ function(makemacros)
  	)
  endfunction()
  
@@ -548,5 +548,6 @@ index e2a1c5c..7fd1b12 100644
 -	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${CMAKE_PROJECT_NAME}
 -	NAMESPACE rpm::
 -)
-+# Install file attributes
++# Install file attributes and helper scripts
 +add_subdirectory(fileattrs)
++add_subdirectory(scripts)
